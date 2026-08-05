@@ -1,0 +1,15 @@
+venv/
+
+__pycache__/
+
+*.pyc
+
+*.xlsx
+
+output/
+
+.env
+
+.idea/
+
+.vscode/

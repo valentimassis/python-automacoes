@@ -1,0 +1,2 @@
+# Dependências serão adicionadas conforme o projeto evoluir
+#pip freeze > requirements.txt
