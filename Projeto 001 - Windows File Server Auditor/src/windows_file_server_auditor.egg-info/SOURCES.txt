@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+src/wfsa/__init__.py
+src/wfsa/collectors/__init__.py
+src/wfsa/models/__init__.py
+src/wfsa/models/share.py
+src/windows_file_server_auditor.egg-info/PKG-INFO
+src/windows_file_server_auditor.egg-info/SOURCES.txt
+src/windows_file_server_auditor.egg-info/dependency_links.txt
+src/windows_file_server_auditor.egg-info/top_level.txt
+tests/test_share.py

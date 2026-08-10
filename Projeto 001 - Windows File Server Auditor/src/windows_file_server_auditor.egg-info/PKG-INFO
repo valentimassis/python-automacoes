@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: windows-file-server-auditor
+Version: 0.1.0
+Summary: Auditoria automatizada de servidores de arquivos Windows
+Requires-Python: >=3.11
