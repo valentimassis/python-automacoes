@@ -160,3 +160,12 @@ Após a primeira versão pública, poderão ser avaliadas:
 - Integrações com ferramentas de segurança
 - Integrações com ITSM
 - Automação de remediação
+
+### Segurança e execução em produção
+
+- [ ] Definir conta de serviço para execução do auditor
+- [ ] Definir permissões mínimas necessárias
+- [ ] Validar execução remota via PowerShell/WinRM
+- [ ] Evitar credenciais hardcoded
+- [ ] Documentar requisitos de execução
+- [ ] Testar execução com conta de serviço

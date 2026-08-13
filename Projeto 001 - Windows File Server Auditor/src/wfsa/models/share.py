@@ -7,5 +7,5 @@ class Share:
 
     name: str
     path: str
-    protocol: str
-    clustered: bool
+    description: str
+    share_type: str
