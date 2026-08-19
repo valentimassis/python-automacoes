@@ -8,7 +8,7 @@ O Windows File Server Auditor será desenvolvido de forma incremental, evoluindo
 
 ## Sprint 1 — Estrutura do projeto
 
-Objetivo: criar a fundação do projeto.
+Status: **Concluída**
 
 - Estrutura do projeto
 - Git/GitHub
@@ -22,7 +22,7 @@ Objetivo: criar a fundação do projeto.
 
 ## Sprint 2 — Compartilhamentos
 
-Objetivo: automatizar a descoberta dos compartilhamentos SMB.
+Status: **Concluída**
 
 - Identificação dos compartilhamentos
 - Nome
@@ -36,22 +36,32 @@ Objetivo: automatizar a descoberta dos compartilhamentos SMB.
 
 ## Sprint 3 — Permissões
 
-Objetivo: automatizar a análise de permissões dos compartilhamentos e do sistema de arquivos.
+Status: **Em andamento**
+
+### Implementado
 
 - Share Permissions
-- NTFS Permissions
+- Coleta de permissões SMB
+- Coleta de permissões NTFS
+- Modelo estruturado de permissões
+- Análise inicial de riscos
+- Finding para `Everyone` com `Full` em compartilhamento SMB
+- Testes automatizados
+
+### Próximos passos
+
 - Permission Inheritance
 - Explicit vs Inherited ACE
 - Users and Groups
 - SID Resolution
 - Effective Access
-- Security Findings
+- Ampliação dos Security Findings
 
 ---
 
 ## Sprint 4 — Espaço e armazenamento
 
-Objetivo: analisar utilização e capacidade do armazenamento.
+Status: **Pendente**
 
 - Volume utilization
 - Share size
@@ -64,20 +74,42 @@ Objetivo: analisar utilização e capacidade do armazenamento.
 
 ## Sprint 5 — Arquivos antigos
 
-Objetivo: identificar arquivos sem alteração por longos períodos.
+Status: **Em andamento**
 
-- Arquivos antigos
-- Arquivos grandes
-- Classificação por idade
-- Tamanho acumulado
-- Indicadores de limpeza
-- Findings
+### Implementado
+
+- Coleta de metadados dos arquivos
+- Nome
+- Caminho
+- Extensão
+- Tamanho
+- Data de criação
+- Última alteração
+- Último acesso
+- Processamento em streaming
+- Análise de arquivos antigos
+- Identificação de arquivos sem alteração há mais de 2 anos
+- Identificação de arquivos sem acesso há mais de 2 anos
+- Findings de severidade `MEDIUM`
+- Testes automatizados
+
+### Validação real
+
+A coleta e análise foram executadas contra:
+
+- Servidor: `lst-fs01`
+- Caminho: `E:\Shares\Financeiro`
+- Data de referência: `18/08/2026`
+
+Resultado:
+
+- **536.417 findings**
 
 ---
 
 ## Sprint 6 — Relatórios Excel
 
-Objetivo: transformar os resultados da auditoria em relatórios profissionais.
+Status: **Pendente**
 
 - Relatório Excel
 - Resumo executivo
@@ -92,7 +124,7 @@ Objetivo: transformar os resultados da auditoria em relatórios profissionais.
 
 ## Sprint 7 — Dashboard
 
-Objetivo: disponibilizar uma interface visual para análise dos resultados.
+Status: **Pendente**
 
 - Streamlit
 - Dashboard
@@ -106,7 +138,7 @@ Objetivo: disponibilizar uma interface visual para análise dos resultados.
 
 ## Sprint 8 — Inteligência Artificial
 
-Objetivo: utilizar IA para interpretar os resultados da auditoria.
+Status: **Pendente**
 
 - Recomendações
 - Resumo executivo
@@ -119,7 +151,7 @@ Objetivo: utilizar IA para interpretar os resultados da auditoria.
 
 ## Sprint 9 — Productização
 
-Objetivo: transformar o projeto em uma solução mais próxima de um produto.
+Status: **Pendente**
 
 - Docker
 - Configuração
@@ -134,7 +166,7 @@ Objetivo: transformar o projeto em uma solução mais próxima de um produto.
 
 ## Sprint 10 — Primeira versão pública
 
-Objetivo: preparar o projeto para publicação e apresentação profissional.
+Status: **Pendente**
 
 - Revisão do código
 - Revisão da arquitetura
@@ -147,19 +179,9 @@ Objetivo: preparar o projeto para publicação e apresentação profissional.
 
 ---
 
-## Evolução futura
+## Próximo foco
 
-Após a primeira versão pública, poderão ser avaliadas:
-
-- Auditoria de múltiplos servidores
-- Histórico de auditorias
-- Comparação entre auditorias
-- Alertas
-- API
-- Banco de dados
-- Integrações com ferramentas de segurança
-- Integrações com ITSM
-- Automação de remediação
+A próxima etapa será continuar a **Sprint 3 — Permissões**, evoluindo a análise de permissões SMB/NTFS antes de avançar para armazenamento e relatórios.
 
 ### Segurança e execução em produção
 
