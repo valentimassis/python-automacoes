@@ -12,9 +12,11 @@ def run_audit(
 ) -> AuditResult:
     """Executa a auditoria de metadados e retorna o resultado consolidado."""
 
-    files = get_file_metadata(
-        server=server,
-        path=path,
+    files = list(
+        get_file_metadata(
+            server=server,
+            path=path,
+        )
     )
 
     findings = analyze_old_files(
@@ -25,5 +27,6 @@ def run_audit(
     return AuditResult(
         server=server,
         reference_date=reference_date,
+        files=files,
         findings=findings,
     )
