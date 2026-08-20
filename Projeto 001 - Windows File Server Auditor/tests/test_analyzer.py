@@ -30,3 +30,8 @@ def test_detect_everyone_full_access():
     assert len(findings) == 1
     assert findings[0].severity == "HIGH"
     assert findings[0].share_name == "Financeiro$"
+
+    assert findings[0].account_name == "Everyone"
+    assert findings[0].access_right == "Full"
+    assert findings[0].access_control_type == "Allow"
+    assert findings[0].is_inherited is None

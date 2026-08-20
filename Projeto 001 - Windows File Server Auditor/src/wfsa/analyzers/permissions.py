@@ -14,6 +14,7 @@ def analyze_permissions(
 
     findings: list[Finding] = []
 
+    # SMB
     for permission in share_permissions:
         if (
             permission.account_name.lower() == "everyone"
@@ -31,7 +32,83 @@ def analyze_permissions(
                         "O compartilhamento SMB concede acesso Full "
                         "para Everyone."
                     ),
+                    account_name=permission.account_name,
+                    access_right=permission.access_right,
+                    access_control_type=permission.access_control_type,
+                    is_inherited=None,
                 )
             )
+
+    # NTFS
+    for permission in ntfs_permissions:
+        if (
+            permission.account_name.lower() == "everyone"
+            and permission.access_control_type.lower() == "allow"
+        ):
+            access_right = permission.access_rights.lower()
+
+            if access_right == "fullcontrol":
+                if permission.is_inherited:
+                    title = (
+                        "Pasta NTFS com Everyone em FullControl "
+                        "(Herdada)"
+                    )
+                    description = (
+                        "A pasta possui uma permissão NTFS herdada que "
+                        "concede FullControl para Everyone."
+                    )
+                else:
+                    title = "Pasta NTFS com Everyone em FullControl"
+                    description = (
+                        "A pasta possui uma permissão NTFS explícita que "
+                        "concede FullControl para Everyone."
+                    )
+
+                findings.append(
+                    Finding(
+                        server=server,
+                        share_name=share.name,
+                        path=share.path,
+                        severity="HIGH",
+                        title=title,
+                        description=description,
+                        account_name=permission.account_name,
+                        access_right=permission.access_rights,
+                        access_control_type=permission.access_control_type,
+                        is_inherited=permission.is_inherited,
+                    )
+                )
+
+            elif access_right == "modify":
+                if permission.is_inherited:
+                    title = (
+                        "Pasta NTFS com Everyone em Modify "
+                        "(Herdada)"
+                    )
+                    description = (
+                        "A pasta possui uma permissão NTFS herdada que "
+                        "concede Modify para Everyone."
+                    )
+                else:
+                    title = "Pasta NTFS com Everyone em Modify"
+                    description = (
+                        "A pasta possui uma permissão NTFS explícita que "
+                        "concede Modify para Everyone."
+                    )
+
+                findings.append(
+                    Finding(
+                        server=server,
+                        share_name=share.name,
+                        path=share.path,
+                        severity="HIGH",
+                        title=title,
+                        description=description,
+                        account_name=permission.account_name,
+                        access_right=permission.access_rights,
+                        access_control_type=permission.access_control_type,
+                        is_inherited=permission.is_inherited,
+                    )
+                )
 
     return findings

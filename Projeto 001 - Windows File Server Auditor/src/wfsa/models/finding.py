@@ -11,3 +11,7 @@ class Finding:
     severity: str
     title: str
     description: str
+    account_name: str | None = None
+    access_right: str | None = None
+    access_control_type: str | None = None
+    is_inherited: bool | None = None
