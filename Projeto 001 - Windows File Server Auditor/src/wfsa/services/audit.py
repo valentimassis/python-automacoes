@@ -3,9 +3,11 @@ from datetime import datetime
 from wfsa.analyzers.file_metadata import analyze_old_files
 from wfsa.analyzers.permissions import analyze_permissions
 from wfsa.collectors.file_metadata import get_file_metadata
+from wfsa.collectors.ntfs import get_ntfs_permissions
 from wfsa.collectors.permissions import get_permissions
 from wfsa.collectors.smb import get_shares
 from wfsa.models.audit import AuditResult
+from wfsa.models.ntfs_permission import NtfsPermission
 from wfsa.models.permission import Permission
 
 
@@ -21,6 +23,7 @@ def run_audit(
     )
 
     permissions: list[Permission] = []
+    ntfs_permissions: list[NtfsPermission] = []
     findings = []
 
     for share in shares:
@@ -29,14 +32,20 @@ def run_audit(
             share_name=share.name,
         )
 
+        share_ntfs_permissions = get_ntfs_permissions(
+            server=server,
+            path=share.path,
+        )
+
         permissions.extend(share_permissions)
+        ntfs_permissions.extend(share_ntfs_permissions)
 
         findings.extend(
             analyze_permissions(
                 server=server,
                 share=share,
                 share_permissions=share_permissions,
-                ntfs_permissions=[],
+                ntfs_permissions=share_ntfs_permissions,
             )
         )
 
@@ -59,6 +68,7 @@ def run_audit(
         reference_date=reference_date,
         shares=shares,
         permissions=permissions,
+        ntfs_permissions=ntfs_permissions,
         files=files,
         findings=findings,
     )
