@@ -25,3 +25,7 @@ output/
 # IDE
 .idea/
 .vscode/
+# Credenciais e resultados de auditoria
+wfsa-credential.xml
+*.credential.xml
+audit-result.json
