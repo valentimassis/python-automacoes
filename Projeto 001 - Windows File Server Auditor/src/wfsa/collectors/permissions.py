@@ -1,36 +1,57 @@
 import json
 import subprocess
+from pathlib import Path
 
 from wfsa.models.permission import Permission
 
 
-def get_permissions(server: str, share_name: str) -> list[Permission]:
+def get_permissions(
+    server: str,
+    share_name: str,
+    credential_file: str | None = None,
+) -> list[Permission]:
     """Coleta as permissões SMB de um compartilhamento."""
 
     script_path = (
-        "src/wfsa/powershell/smb_permissions.ps1"
+        Path(__file__).resolve().parent.parent
+        / "powershell"
+        / "smb_permissions.ps1"
     )
 
     command = [
-        "powershell.exe",
+        r"C:\Program Files\PowerShell\7\pwsh.exe",
         "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
         "-File",
-        script_path,
+        str(script_path),
         "-Server",
         server,
         "-ShareName",
         share_name,
     ]
 
+    if credential_file is not None:
+        command.extend([
+            "-CredentialFile",
+            credential_file,
+        ])
+
     result = subprocess.run(
         command,
         capture_output=True,
         text=True,
         encoding="utf-8",
+        errors="strict",
         check=True,
     )
 
-    data = json.loads(result.stdout)
+    stdout = result.stdout.strip()
+
+    if not stdout:
+        return []
+
+    data = json.loads(stdout)
 
     if isinstance(data, dict):
         data = [data]

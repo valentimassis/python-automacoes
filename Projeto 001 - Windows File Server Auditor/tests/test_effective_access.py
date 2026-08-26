@@ -1,37 +1,39 @@
-from wfsa.analyzers.access import calculate_effective_access
+from wfsa.services.effective_access import calculate_effective_access
 
 
-def test_full_and_full_is_full():
-    assert calculate_effective_access("FULL", "FULL") == "FULL"
+def test_effective_full_access_is_high_risk():
+    result = calculate_effective_access(
+        account_name="Acesso_Financeiro",
+        identity_type="GROUP",
+        smb_access="Full",
+        ntfs_access="Modify",
+    )
+
+    assert result.account_name == "Acesso_Financeiro"
+    assert result.identity_type == "GROUP"
+    assert result.effective_access == "FULL"
+    assert result.risk_level == "HIGH"
 
 
-def test_full_and_modify_is_modify():
-    assert calculate_effective_access("FULL", "MODIFY") == "MODIFY"
+def test_effective_modify_access_is_medium_risk():
+    result = calculate_effective_access(
+        account_name="Acesso_Financeiro",
+        identity_type="GROUP",
+        smb_access="Change",
+        ntfs_access="Modify",
+    )
+
+    assert result.effective_access == "MODIFY"
+    assert result.risk_level == "MEDIUM"
 
 
-def test_full_and_read_is_read():
-    assert calculate_effective_access("FULL", "READ") == "READ"
+def test_effective_access_without_both_layers_is_unknown():
+    result = calculate_effective_access(
+        account_name="Acesso_Financeiro",
+        identity_type="GROUP",
+        smb_access="Full",
+        ntfs_access=None,
+    )
 
-
-def test_modify_and_full_is_modify():
-    assert calculate_effective_access("MODIFY", "FULL") == "MODIFY"
-
-
-def test_modify_and_modify_is_modify():
-    assert calculate_effective_access("MODIFY", "MODIFY") == "MODIFY"
-
-
-def test_modify_and_read_is_read():
-    assert calculate_effective_access("MODIFY", "READ") == "READ"
-
-
-def test_read_and_full_is_read():
-    assert calculate_effective_access("READ", "FULL") == "READ"
-
-
-def test_read_and_modify_is_read():
-    assert calculate_effective_access("READ", "MODIFY") == "READ"
-
-
-def test_read_and_read_is_read():
-    assert calculate_effective_access("READ", "READ") == "READ"
+    assert result.effective_access is None
+    assert result.risk_level == "UNKNOWN"

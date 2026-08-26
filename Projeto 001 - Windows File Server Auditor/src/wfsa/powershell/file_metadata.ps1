@@ -3,13 +3,18 @@ param(
     [string]$Server,
 
     [Parameter(Mandatory = $true)]
-    [string]$Path
+    [string]$Path,
+
+    [Parameter(Mandatory = $true)]
+    [string]$CredentialFile
 )
 
-$Credential = Get-Credential
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+$Credential = Import-Clixml -Path $CredentialFile
 
 Invoke-Command -ComputerName $Server -Credential $Credential -ScriptBlock {
-    param($Path)
+    param($RemotePath)
 
     function ConvertTo-Base64Utf8 {
         param(
@@ -25,13 +30,8 @@ Invoke-Command -ComputerName $Server -Credential $Credential -ScriptBlock {
         return [Convert]::ToBase64String($bytes)
     }
 
-    Get-ChildItem `
-        -LiteralPath $Path `
-        -File `
-        -Recurse `
-        -ErrorAction SilentlyContinue |
+    Get-ChildItem -LiteralPath $RemotePath -File -Recurse -ErrorAction SilentlyContinue |
         ForEach-Object {
-
             $creationTime = $_.CreationTime.ToString("o")
             $lastWriteTime = $_.LastWriteTime.ToString("o")
             $lastAccessTime = $_.LastAccessTime.ToString("o")
@@ -48,5 +48,4 @@ Invoke-Command -ComputerName $Server -Credential $Credential -ScriptBlock {
 
             $fields -join "|"
         }
-
 } -ArgumentList $Path

@@ -1,18 +1,45 @@
 def normalize_access_right(access_right: str) -> str:
-    """Normaliza nomes de direitos SMB e NTFS para uma representação comum."""
+    """Normaliza nomes de direitos SMB e NTFS."""
 
     value = access_right.strip().lower()
 
-    mapping = {
+    # O SMB retorna valores simples como:
+    # Full, Change, Read
+    smb_mapping = {
         "full": "FULL",
-        "fullcontrol": "FULL",
-        "modify": "MODIFY",
+        "change": "MODIFY",
         "read": "READ",
-        "write": "WRITE",
-        "readandexecute": "READ_EXECUTE",
     }
 
-    return mapping.get(value, value.upper())
+    if value in smb_mapping:
+        return smb_mapping[value]
+
+    # O NTFS pode retornar combinações como:
+    # ReadAndExecute, Synchronize
+    # Modify, Synchronize
+    # FullControl
+    parts = {
+        part.strip()
+        for part in value.split(",")
+        if part.strip()
+    }
+
+    if "fullcontrol" in parts:
+        return "FULL"
+
+    if "modify" in parts:
+        return "MODIFY"
+
+    if "readandexecute" in parts:
+        return "READ_EXECUTE"
+
+    if "read" in parts:
+        return "READ"
+
+    if "write" in parts:
+        return "WRITE"
+
+    return value.upper()
 
 
 def calculate_effective_access(
@@ -33,9 +60,17 @@ def calculate_effective_access(
     }
 
     if smb not in access_levels:
-        raise ValueError(f"Direito SMB não suportado: {smb_right}")
+        raise ValueError(
+            f"Direito SMB não suportado: {smb_right}"
+        )
 
     if ntfs not in access_levels:
-        raise ValueError(f"Direito NTFS não suportado: {ntfs_right}")
+        raise ValueError(
+            f"Direito NTFS não suportado: {ntfs_right}"
+        )
 
-    return smb if access_levels[smb] <= access_levels[ntfs] else ntfs
+    return (
+        smb
+        if access_levels[smb] <= access_levels[ntfs]
+        else ntfs
+    )

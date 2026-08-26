@@ -52,6 +52,7 @@ def analyze_permissions(
         ):
             continue
 
+        # NtfsPermission usa "access_rights" no plural.
         access_right = permission.access_rights.lower()
 
         if access_right == "fullcontrol":
@@ -113,14 +114,14 @@ def analyze_permissions(
             )
 
     # ---------------------------------------------------------
-    # 3. Acesso efetivo SMB + NTFS
+    # 3. Cálculo do acesso efetivo SMB + NTFS
     #
     # Só calcula quando existe uma permissão Everyone Allow
     # nos dois níveis.
     #
     # Exemplo:
-    # SMB   = Full
-    # NTFS  = Modify
+    # SMB  = Full
+    # NTFS = Modify
     # Efetivo = Modify
     # ---------------------------------------------------------
     smb_everyone = next(
@@ -154,7 +155,7 @@ def analyze_permissions(
         )
 
         # O finding individual de SMB Full + NTFS Modify já existe.
-        # Neste cenário, substituímos os dois findings individuais
+        # Neste cenário, substituímos os findings individuais
         # por um único finding de acesso efetivo.
         if effective_access == "MODIFY":
             findings = [

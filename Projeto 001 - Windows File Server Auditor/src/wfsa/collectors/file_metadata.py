@@ -14,6 +14,7 @@ def _decode_base64(value: str) -> str:
 def get_file_metadata(
     server: str,
     path: str,
+    credential_file: str | None = None,
 ) -> Iterator[FileMetadata]:
     """Coleta metadados dos arquivos em streaming."""
 
@@ -35,6 +36,9 @@ def get_file_metadata(
         "-Path",
         path,
     ]
+
+    if credential_file is not None:
+        command.extend(["-CredentialFile", credential_file])
 
     result = subprocess.run(
         command,

@@ -3,12 +3,24 @@ param(
     [string]$Server,
 
     [Parameter(Mandatory = $true)]
-    [string]$ShareName
+    [string]$ShareName,
+
+    [Parameter(Mandatory = $false)]
+    [PSCredential]$Credential,
+
+    [Parameter(Mandatory = $false)]
+    [string]$CredentialFile
 )
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-$Credential = Get-Credential
+if ($CredentialFile) {
+    $Credential = Import-Clixml -Path $CredentialFile
+}
+
+if (-not $Credential) {
+    $Credential = Get-Credential
+}
 
 Invoke-Command `
     -ComputerName $Server `
