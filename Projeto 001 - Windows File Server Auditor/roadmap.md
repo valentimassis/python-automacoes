@@ -44,18 +44,25 @@ Status: **Em andamento**
 - Coleta de permissões SMB
 - Coleta de permissões NTFS
 - Modelo estruturado de permissões
-- Análise inicial de riscos
+- Permission Inheritance
+- Explicit vs Inherited ACE
+- Normalização de direitos SMB e NTFS
+- Cálculo de Effective Access
 - Finding para `Everyone` com `Full` em compartilhamento SMB
+- Finding para `Everyone` com `FullControl` em NTFS
+- Finding para `Everyone` com `Modify` em NTFS
+- Identificação de permissões herdadas
+- Findings de segurança
+- Integração da análise NTFS ao serviço de auditoria
 - Testes automatizados
 
 ### Próximos passos
 
-- Permission Inheritance
-- Explicit vs Inherited ACE
 - Users and Groups
 - SID Resolution
-- Effective Access
+- Identificação de usuários vs grupos
 - Ampliação dos Security Findings
+- Análise de grupos privilegiados
 
 ---
 
@@ -181,7 +188,7 @@ Status: **Pendente**
 
 ## Próximo foco
 
-A próxima etapa será continuar a **Sprint 3 — Permissões**, evoluindo a análise de permissões SMB/NTFS antes de avançar para armazenamento e relatórios.
+A próxima etapa será continuar a **Sprint 3 — Permissões**, com foco em identificação de usuários e grupos e resolução de SID, antes de avançar para armazenamento e relatórios.
 
 ### Segurança e execução em produção
 
